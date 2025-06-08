@@ -2,14 +2,20 @@ import React, { useState } from 'react';
 import { Button, View, Alert } from 'react-native';
 import FormContainer from '../components/FormContainer';
 import FormInput from '../components/FormInput';
+import { useAuth } from '../context/AuthContext';
 
-export default function RegisterScreen({ onLogin, navigation }) {
+export default function RegisterScreen({ navigation }) {
+  const { register } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleRegister = () => {
-    Alert.alert('Registration Successful', `Welcome ${email}!`);
-    onLogin();
+  const handleRegister = async () => {
+    try {
+      await register(email, password);
+      Alert.alert("Success", "Account created!");
+    } catch (err) {
+      Alert.alert("Registration failed", err.message);
+    }
   };
 
   return (

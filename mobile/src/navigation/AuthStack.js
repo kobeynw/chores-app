@@ -5,14 +5,14 @@ import RegisterScreen from '../screens/RegisterScreen';
 
 const Stack = createNativeStackNavigator();
 
-export default function AuthStack({ onLogin }) {
+export default function AuthStack() {
   return (
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Login">
-        {props => <LoginScreen {...props} onLogin={onLogin} />}
+        {props => <LoginScreen {...props} />}
       </Stack.Screen>
       <Stack.Screen name="Register">
-        {props => <RegisterScreen {...props} onLogin={onLogin} />}
+        {props => <RegisterScreen {...props} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
