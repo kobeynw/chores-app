@@ -1,0 +1,16 @@
+# Ignore logs and system files
+*.log
+.DS_Store
+
+# Ignore node_modules
+/mobile/node_modules/
+/mobile/.expo/
+
+# Ignore Rails tmp and credentials
+/backend/tmp/
+/backend/log/
+/backend/.env
+/backend/config/master.key
+
+# Ignore system files
+.env
