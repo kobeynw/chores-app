@@ -13,20 +13,20 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password:
-  socket: /tmp/mysql.sock
+  username: <%= Rails.application.credentials.dig(:mysql, :username) %>
+  password: <%= Rails.application.credentials.dig(:mysql, :password) %>
+  host: localhost
 
 development:
   <<: *default
-  database: backend_development
+  database: chores_app_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: backend_test
+  database: chores_app_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -51,18 +51,18 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: backend_production
-    username: backend
-    password: <%= ENV["BACKEND_DATABASE_PASSWORD"] %>
+    database: chores_app_production
+    username: chores_app
+    password: <%= ENV["CHORES_APP_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
-    database: backend_production_cache
+    database: chores_app_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: backend_production_queue
+    database: chores_app_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: backend_production_cable
+    database: chores_app_production_cable
     migrations_paths: db/cable_migrate

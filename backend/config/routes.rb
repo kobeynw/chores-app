@@ -7,4 +7,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  
+  namespace :api do
+    namespace :v1 do
+      get "/ping", to: "ping#index"
+    end
+  end
 end
