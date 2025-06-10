@@ -1,11 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Logout from '../components/Logout';
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Welcome to your chore app!</Text>
-    </View>
+    <>
+      <Logout />
+      <View style={styles.container}>
+        <Text style={styles.text}>Welcome to your chore app!</Text>
+      </View>
+    </>
   );
 }
 
