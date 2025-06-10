@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginUser, registerUser } from "../api/auth";
+import { getProfile } from "../api/user";
 
 const AuthContext = createContext();
 
@@ -11,13 +12,20 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const loadToken = async () => {
-      const storedToken = await AsyncStorage.getItem("token");
-      if (storedToken) {
-        setToken(storedToken);
-        // TODO: fetch user profile from backend using token
-        setUser({}); // Replace with real user data if needed
+      try {
+        const storedToken = await AsyncStorage.getItem("token");
+        if (storedToken) {
+          setToken(storedToken);
+          const profile = await getProfile(storedToken);
+          setUser(profile);
+        }
+      } catch (err) {
+        console.log("Failed to retrieve User Profile", err);
+        setUser(null);
+        setToken(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     loadToken();
   }, []);

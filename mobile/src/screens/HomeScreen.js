@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Logout from '../components/Logout';
+import { useAuth } from '../context/AuthContext';
 
 export default function HomeScreen() {
+  const { user } = useAuth();
+
   return (
     <>
       <Logout />

@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "register", to: "auth#register"
       post "login", to: "auth#login"
+      get "profile", to: "users#profile"
+
       get "/ping", to: "ping#index"
     end
   end

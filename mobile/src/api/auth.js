@@ -1,7 +1,7 @@
-const API_URL = "http://192.168.4.49:3000/api/v1";
+import { API_BASE_URL } from "../config";
 
 export async function registerUser(email, password) {
-  const res = await fetch(`${API_URL}/register`, {
+  const res = await fetch(`${API_BASE_URL}/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
@@ -16,7 +16,7 @@ export async function registerUser(email, password) {
 }
 
 export async function loginUser(email, password) {
-  const res = await fetch(`${API_URL}/login`, {
+  const res = await fetch(`${API_BASE_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
