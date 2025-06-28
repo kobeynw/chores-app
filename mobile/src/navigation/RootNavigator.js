@@ -18,10 +18,22 @@ export default function RootNavigator() {
   return (
     <NavigationContainer>
       {isLoggedIn ? (
-        <AppStack />
+        <AppStack headerStyle={headerStyle} />
       ) : (
-        <AuthStack />
+        <AuthStack headerStyle={headerStyle} />
       )}
     </NavigationContainer>
   );
 }
+
+const headerStyle = { 
+  title: 'My Chores App',
+  headerStyle: {
+    backgroundColor: '#4CAF50',
+  },
+  headerTintColor: '#212121',
+  headerTitleStyle: {
+    fontFamily: 'Chalkboard SE',
+    fontSize: 20,
+  }
+};

@@ -4,13 +4,13 @@ import HomeScreen from '../screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
-export default function AppStack() {
+export default function AppStack(headerStyle) {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ title: 'Welcome' }}
+        options={headerStyle}
       />
       {/* Add more app screens here later */}
     </Stack.Navigator>
