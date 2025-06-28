@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def authorize_request
-    header = request.header['Authorization']
+    header = request.headers['Authorization']
     token = header.split.last if header
 
     begin
