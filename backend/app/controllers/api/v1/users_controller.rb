@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authorize_request
 
+  # GET /api/v1/profile
   def profile
     render json: { user: @current_user }, status: :ok
   end
