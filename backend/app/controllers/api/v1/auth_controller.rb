@@ -1,4 +1,5 @@
 class Api::V1::AuthController < ApplicationController
+  # POST /api/v1/register
   def register
     user = User.new(user_params)
     if user.save
@@ -9,6 +10,7 @@ class Api::V1::AuthController < ApplicationController
     end
   end
 
+  # POST /api/v1/login
   def login
     user = User.find_by(email: params[:email])
     if user&.authenticate(params[:password])
