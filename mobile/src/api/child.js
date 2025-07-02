@@ -1,8 +1,5 @@
 import { API_BASE_URL } from "../config";
 
-/**
- * @returns {Child[]} data
- */
 export async function getChildren(token) {
   const res = await fetch(`${API_BASE_URL}/children`, {
     method: "GET",
@@ -20,9 +17,6 @@ export async function getChildren(token) {
   return data;
 }
 
-/**
- * @returns {Child} data
- */
 export async function getChild(childId, token) {
   const res = await fetch(`${API_BASE_URL}/children/${childId}`, {
     method: "GET",
@@ -41,9 +35,8 @@ export async function getChild(childId, token) {
 }
 
 /**
- * @param {ChildDto} childData - {"child": {"name": "Emma", "age": 7, "avatar_url": "https://example.com/avatar.png"}}
- * @param {String} token 
- * @returns {Child} data - {"id":3,"name":"Emma","avatar_url":"https://example.com/avatar.png","age":7,"points":0,"user_id":3,"created_at":"2025-06-30T02:44:06.330Z","updated_at":"2025-06-30T02:44:06.330Z"}
+ * childData - {"child": {"name": "Emma", "age": 7, "avatar_url": "https://example.com/avatar.png"}}
+ * data - {"id":3,"name":"Emma","avatar_url":"https://example.com/avatar.png","age":7,"points":0,"user_id":3,"created_at":"2025-06-30T02:44:06.330Z","updated_at":"2025-06-30T02:44:06.330Z"}
  */
 export async function createChild(childData, token) {
   const res = fetch(`${API_BASE_URL}/children`, {
@@ -63,9 +56,6 @@ export async function createChild(childData, token) {
   return data;
 }
 
-/**
- * @returns {Child} data
- */
 export async function updateChild(childId, childData, token) {
   const res = fetch(`${API_BASE_URL}/children/${childId}`, {
     method: "PUT",
@@ -84,9 +74,6 @@ export async function updateChild(childId, childData, token) {
   return data;
 }
 
-/**
- * @returns {Boolean} true - child was deleted successfully
- */
 export async function deleteChild(childId, token) {
   const res = fetch(`${API_BASE_URL}/children/${childId}`, {
     method: "DELETE",
