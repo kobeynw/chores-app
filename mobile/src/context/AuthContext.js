@@ -2,11 +2,13 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginUser, registerUser } from "../api/auth";
 import { getProfile } from "../api/user";
+import { getChildren } from "../api/child";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [childProfiles, setChildProfiles] = useState([])
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -18,11 +20,14 @@ export function AuthProvider({ children }) {
           setToken(storedToken);
           const profile = await getProfile(storedToken);
           setUser(profile);
+          const childProfileData = await getChildren(storedToken);
+          setChildProfiles(childProfileData);
         }
       } catch (err) {
         console.log("Failed to retrieve User Profile", err);
         setUser(null);
         setToken(null);
+        setChildProfiles([]);
       } finally {
         setLoading(false);
       }
@@ -35,6 +40,8 @@ export function AuthProvider({ children }) {
     await AsyncStorage.setItem("token", res.token);
     setToken(res.token);
     setUser(res.user);
+    const childProfileData = await getChildren(res.token);
+    setChildProfiles(childProfileData);
   };
 
   const register = async (email, password) => {
@@ -42,6 +49,8 @@ export function AuthProvider({ children }) {
     await AsyncStorage.setItem("token", res.token);
     setToken(res.token);
     setUser(res.user);
+    const childProfileData = await getChildren(res.token);
+    setChildProfiles(childProfileData);
   };
 
   const logout = async () => {
@@ -54,6 +63,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
+        childProfiles,
         token,
         loading,
         login,

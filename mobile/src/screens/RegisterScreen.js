@@ -12,7 +12,6 @@ export default function RegisterScreen({ navigation }) {
   const handleRegister = async () => {
     try {
       await register(email, password);
-      Alert.alert("Success", "Account created!");
     } catch (err) {
       Alert.alert("Registration failed", err.message);
     }
