@@ -8,14 +8,22 @@ export default function RegisterScreen({ navigation }) {
   const { register } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passcode, setPasscode] = useState('');
 
   const handleRegister = async () => {
     try {
-      await register(email, password);
+      await register(email, password, passcode);
     } catch (err) {
       Alert.alert("Registration failed", err.message);
     }
   };
+
+  const passcodeInfo = () => {
+    Alert.alert(
+      "What's this?",
+      "The parent passcode is a 4-digit code used to access parent-specific features"
+    )
+  }
 
   return (
     <FormContainer title="Register">
@@ -30,6 +38,23 @@ export default function RegisterScreen({ navigation }) {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <FormInput
+          placeholder="Parent Passcode"
+          value={passcode}
+          onChangeText={setPasscode}
+          maxLength={4}
+          keyboardType="number-pad"
+          secureTextEntry
+          style={{ flex: 1 }}
+        />
+        <View style={{ marginHorizontal: '8%' }}>
+          <Button
+            title="ⓘ"
+            onPress={passcodeInfo}
+          />
+        </View>
+      </View>
       <View style={{ marginTop: 20 }}>
         <Button title="Register" onPress={handleRegister} />
       </View>

@@ -44,8 +44,8 @@ export function AuthProvider({ children }) {
     setChildProfiles(childProfileData);
   };
 
-  const register = async (email, password) => {
-    const res = await registerUser(email, password);
+  const register = async (email, password, passcode) => {
+    const res = await registerUser(email, password, passcode);
     await AsyncStorage.setItem("token", res.token);
     setToken(res.token);
     setUser(res.user);
