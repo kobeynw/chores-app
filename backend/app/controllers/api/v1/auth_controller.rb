@@ -1,4 +1,6 @@
 class Api::V1::AuthController < ApplicationController
+  before_action :authorize_request, only: [:passcode]
+
   # POST /api/v1/register
   def register
     user = User.new(user_params)
@@ -21,9 +23,30 @@ class Api::V1::AuthController < ApplicationController
     end
   end
 
+  # POST /api/v1/passcode
+  def passcode
+    if @current_user.authenticate_passcode(params[:passcode])
+      render json: { success: true }
+    else
+      render json: { success: false, error: "Invalid passcode" }
+    end
+  end
+
   private
 
   def user_params
-    params.permit(:email, :password)
+    params.permit(:email, :password, :passcode)
+  end
+
+  def authorize_request
+    header = request.headers['Authorization']
+    token = header.split.last if header
+
+    begin
+      decoded = JsonWebToken.decode(token)
+      @current_user = User.find(decoded[:user_id])
+    rescue ActiveRecord::RecordNotFound, JWT::DecodeError
+      render json: { errors: 'Unauthorized' }, status: :unauthorized
+    end
   end
 end

@@ -1,13 +1,24 @@
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
-export default function FormInput({ value, onChangeText, placeholder, secureTextEntry = false }) {
+export default function FormInput({
+  value,
+  onChangeText,
+  placeholder,
+  secureTextEntry = false,
+  maxLength = 30,
+  width = null,
+  keyboardType = null,
+  style,
+}) {
   return (
     <TextInput
-      style={styles.input}
+      style={[styles.input, width ? { width } : null, style]}
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder}
+      maxLength={maxLength}
+      keyboardType={keyboardType}
       secureTextEntry={secureTextEntry}
       autoCapitalize="none"
     />

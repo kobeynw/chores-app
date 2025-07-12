@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Button } from 'react-native';
 import Logout from '../components/Logout';
 import { useAuth } from '../context/AuthContext';
 import ChildCard from '../components/ChildCard';
-import { useNavigation } from '@react-navigation/native';
+import PasscodeModal from '../components/PasscodeModal';
 
 export default function HomeScreen() {
+  const [modalVisible, setModalVisible] = useState(false);
   const { childProfiles } = useAuth();
-
-  const navigation = useNavigation();
 
   const childCards = childProfiles.map((childProfile) => (
     <ChildCard key={childProfile.id} childProfile={childProfile} />
@@ -32,8 +31,10 @@ export default function HomeScreen() {
         <Button
           style={styles.footer}
           title="I'm a Parent"
-          onPress={() => navigation.navigate('ParentDashboard')}
+          onPress={() => setModalVisible(true)}
         />
+
+        <PasscodeModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
       </View>
     </>
   );
