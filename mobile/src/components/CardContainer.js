@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function FormContainer({ title, children }) {
+export default function CardContainer({ title, children }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -12,8 +12,10 @@ export default function FormContainer({ title, children }) {
 
 const styles = StyleSheet.create({
   container: {
+    width: '90%',
     padding: 24,
-    margin: 20,
+    marginHorizontal: 20,
+    marginVertical: 30,
     borderRadius: 8,
     backgroundColor: '#f8f8f8',
     elevation: 2,
@@ -21,6 +23,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    alignItems: 'center'
   },
   title: {
     fontSize: 24,

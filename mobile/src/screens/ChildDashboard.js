@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function ChildDashboard() {
+export default function ChildDashboard({ route }) {
+  const { childProfile } = route.params;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Child Dashboard</Text>
+      <Text style={styles.header}>Welcome, {childProfile.name}!</Text>
     </View>
   );
 }
