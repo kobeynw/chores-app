@@ -4,18 +4,25 @@ import Logout from '../components/Logout';
 import { useAuth } from '../context/AuthContext';
 import ChildCard from '../components/ChildCard';
 import PasscodeModal from '../components/PasscodeModal';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const { childProfiles } = useAuth();
+  const navigation = useNavigation();
 
   const childCards = childProfiles.map((childProfile) => (
-    <ChildCard key={childProfile.id} childProfile={childProfile} />
+    <ChildCard
+      key={childProfile.id}
+      childProfile={childProfile}
+      handlePress={() => navigation.navigate('ChildDashboard', { childProfile })}
+    />
   ));
 
   return (
     <>
       <Logout />
+      
       <View style={styles.container}>
         <Text style={styles.header}>Welcome to your chore manager!</Text>
         <Text style={styles.subheader}>Who is using the app?</Text>
@@ -59,11 +66,12 @@ const styles = StyleSheet.create({
   },
   scrollWrapper: {
     height: '60%',
-    width: '100%',
+    width: '90%',
   },
   scrollContent: {
     alignItems: 'center',
     paddingBottom: 10,
+    width: '100%',
   },
   footer: {
     fontSize: 18,
