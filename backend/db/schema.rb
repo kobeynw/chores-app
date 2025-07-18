@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_28_223020) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_18_014518) do
   create_table "children", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "avatar_url"
@@ -19,7 +19,55 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_28_223020) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "level"
+    t.integer "xp"
     t.index ["user_id"], name: "index_children_on_user_id"
+  end
+
+  create_table "chore_assignments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "chore_id", null: false
+    t.bigint "child_id", null: false
+    t.datetime "completed_at"
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id"], name: "index_chore_assignments_on_child_id"
+    t.index ["chore_id"], name: "index_chore_assignments_on_chore_id"
+  end
+
+  create_table "chores", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.integer "points"
+    t.integer "xp"
+    t.integer "frequency"
+    t.date "due_date"
+    t.integer "day_of_week"
+    t.json "days_of_week"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reward_redemptions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "child_id", null: false
+    t.bigint "reward_id", null: false
+    t.datetime "redeemed_at"
+    t.boolean "approved", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id"], name: "index_reward_redemptions_on_child_id"
+    t.index ["reward_id"], name: "index_reward_redemptions_on_reward_id"
+  end
+
+  create_table "rewards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "points_cost"
+    t.boolean "is_active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -31,4 +79,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_28_223020) do
   end
 
   add_foreign_key "children", "users"
+  add_foreign_key "chore_assignments", "children"
+  add_foreign_key "chore_assignments", "chores"
+  add_foreign_key "reward_redemptions", "children"
+  add_foreign_key "reward_redemptions", "rewards"
 end
