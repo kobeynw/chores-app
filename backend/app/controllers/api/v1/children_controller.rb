@@ -45,7 +45,7 @@ class Api::V1::ChildrenController < ApplicationController
   end
 
   def child_params
-    params.require(:child).permit(:name, :avatar_url, :age)
+    params.require(:child).permit(:name, :avatar_url, :age, :points, :xp, :level)
   end
 
   def authorize_request

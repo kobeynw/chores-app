@@ -20,30 +20,29 @@ export default function HomeScreen() {
   ));
 
   return (
-    <>
-      <Logout />
-      
-      <View style={styles.container}>
-        <Text style={styles.header}>Welcome to your chore manager!</Text>
-        <Text style={styles.subheader}>Who is using the app?</Text>
+    <View style={styles.scrollWrapper}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Logout />
+        
+        <View style={styles.container}>
+          <Text style={styles.header}>Welcome to your chore manager!</Text>
+          <Text style={styles.subheader}>Who is using the app?</Text>
 
-        {childProfiles.length > 0 && (
-          <View style={styles.scrollWrapper}>
-            <ScrollView contentContainerStyle={styles.scrollContent}>
-              {childCards}
-            </ScrollView>
+          {childProfiles.length > 0 && childCards}
+
+          <View style={{ marginTop: 40 }}>
+          <Button
+            title="I'm a Parent"
+            onPress={() => setModalVisible(true)}
+          />
           </View>
-        )}
 
-        <Button
-          style={styles.footer}
-          title="I'm a Parent"
-          onPress={() => setModalVisible(true)}
-        />
+          <Text style={{ paddingTop: 150, paddingBottom: 30 }}>Workman Software™</Text>
+        </View>
 
         <PasscodeModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
-      </View>
-    </>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -65,17 +64,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   scrollWrapper: {
-    height: '60%',
-    width: '90%',
+    width: '100%',
+    height: '100%',
   },
   scrollContent: {
-    alignItems: 'center',
     paddingBottom: 10,
     width: '100%',
-  },
-  footer: {
-    fontSize: 18,
-    color: '#212121',
-    marginTop: 20,
   },
 });

@@ -39,7 +39,7 @@ export async function getChild(childId, token) {
  * data - {"id":3,"name":"Emma","avatar_url":"https://example.com/avatar.png","age":7,"points":0,"user_id":3,"created_at":"2025-06-30T02:44:06.330Z","updated_at":"2025-06-30T02:44:06.330Z"}
  */
 export async function createChild(childData, token) {
-  const res = fetch(`${API_BASE_URL}/children`, {
+  const res = await fetch(`${API_BASE_URL}/children`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export async function createChild(childData, token) {
 }
 
 export async function updateChild(childId, childData, token) {
-  const res = fetch(`${API_BASE_URL}/children/${childId}`, {
+  const res = await fetch(`${API_BASE_URL}/children/${childId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export async function updateChild(childId, childData, token) {
 }
 
 export async function deleteChild(childId, token) {
-  const res = fetch(`${API_BASE_URL}/children/${childId}`, {
+  const res = await fetch(`${API_BASE_URL}/children/${childId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

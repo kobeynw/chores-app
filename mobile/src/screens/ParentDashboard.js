@@ -3,15 +3,17 @@ import { View, Text, StyleSheet, ScrollView, Pressable, Button, Alert } from 're
 import ChildCard from '../components/ChildCard';
 import CardContainer from '../components/CardContainer';
 import { useAuth } from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ParentDashboard() {
   const { childProfiles } = useAuth();
+  const navigation = useNavigation();
 
   const childCards = childProfiles.map((childProfile) => (
     <ChildCard
       key={childProfile.id}
       childProfile={childProfile}
-      handlePress={() => {Alert.alert("Going to Child Profile...")}}
+      handlePress={() => navigation.navigate('ChildProfileViewer', { childProfile })}
     />
   ));
 
@@ -33,7 +35,7 @@ export default function ParentDashboard() {
           {childProfiles.length > 0 && childCards}
           <Pressable 
             style={pressableStyle}
-            onPress={() => {Alert.alert("Adding Child...")}}
+            onPress={() => navigation.navigate('AddChildDisplay')}
           >
             <Text style={styles.text}>Add Child</Text>
           </Pressable>

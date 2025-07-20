@@ -13,5 +13,7 @@ class Child < ApplicationRecord
 
   def set_defaults
     self.points ||= 0
+    self.level ||= 1
+    self.xp ||= 0
   end
 end

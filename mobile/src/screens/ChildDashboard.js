@@ -27,7 +27,6 @@ export default function ChildDashboard({ route }) {
           <EllipseShape
             width={300}
             height={110}
-            style={styles.ellipse}
           />
           <Image 
             source={require('../../assets/ninja-mask.png')}
@@ -93,21 +92,6 @@ export default function ChildDashboard({ route }) {
             onPress={() => {Alert.alert("Opening Character Store...")}}
           >
             <Text style={styles.text}>Character Store</Text>
-          </Pressable>
-        </CardContainer>
-
-        <CardContainer title="My Progress">
-          <Pressable 
-            style={pressableStyle}
-            onPress={() => {Alert.alert("Opening My Goals...")}}
-          >
-            <Text style={styles.text}>My Goals</Text>
-          </Pressable>
-          <Pressable 
-            style={pressableStyle}
-            onPress={() => {Alert.alert("Opening Chore Stats...")}}
-          >
-            <Text style={styles.text}>Chore Stats</Text>
           </Pressable>
         </CardContainer>
 
