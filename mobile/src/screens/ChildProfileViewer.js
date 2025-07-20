@@ -3,7 +3,10 @@ import {
   View, Text, Image, Button, Pressable, StyleSheet, TextInput, Keyboard,
   KeyboardAvoidingView, ScrollView, Platform, Alert
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import EllipseShape from '../components/EllipseShape';
+import { deleteChild, updateChild } from '../api/child';
+import { useAuth } from '../context/AuthContext';
 
 export default function ChildProfileViewer({ route }) {
   const { childProfile } = route.params;
@@ -11,15 +14,73 @@ export default function ChildProfileViewer({ route }) {
   const [xp, setXp] = useState(childProfile.xp);
   const [level, setLevel] = useState(childProfile.level);
   const [age, setAge] = useState(childProfile.age);
+  const { token } = useAuth();
+  const navigation = useNavigation();
 
-  const handleSaveChild = () => {
-    // TODO: add logic to update child profile
-    Alert.alert("Saving info...");
+  const handleUpdateChild = async () => {
+    if (childProfile.age == age && childProfile.points == points && childProfile.xp == xp && childProfile.level == level) {
+      Alert.alert("No information was changed.");
+      return
+    }
+    
+    const updatedChild = {
+      "age": age,
+      "points": points,
+      "xp": xp,
+      "level": level
+    }
+
+    await updateChild(childProfile.id, updatedChild, token);
+    Alert.alert(
+      'Profile Updated',
+      'The profile was successfully updated. Navigating back to dashboard.',
+      [
+        {
+          text: 'Confirm',
+          onPress: () => navigation.goBack(),
+          style: 'default',
+        },
+      ]
+    );
+  }
+
+  const handleDeleteChild = async () => {
+    isDeleted = await deleteChild(childProfile.id, token);
+    if (isDeleted) {
+      Alert.alert(
+        'Profile Deleted',
+        'The profile was successfully deleted. Navigating back to dashboard.',
+        [
+          {
+            text: 'Confirm',
+            onPress: () => navigation.goBack(),
+            style: 'default',
+          },
+        ]
+      );
+    }
+  }
+
+  const confirmDeleteChild = () => {
+    Alert.alert(
+      'Delete Profile',
+      'Are you sure you want to delete this profile?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => handleDeleteChild(),
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
   }
 
   // TODO: add logic to auto-compute the level and XP
-
-  // TODO: add logic to delete child profile
 
   return (
     <KeyboardAvoidingView
@@ -98,7 +159,7 @@ export default function ChildProfileViewer({ route }) {
         <View style={{ alignItems: 'center' }}>
           <Pressable 
             style={pressableStyle}
-            onPress={handleSaveChild}
+            onPress={handleUpdateChild}
           >
             <Text style={styles.text}>Save</Text>
           </Pressable>
@@ -107,7 +168,7 @@ export default function ChildProfileViewer({ route }) {
         <View style={{ marginTop: 20, marginBottom: 50 }}>
           <Button
             title="Delete Profile"
-            onPress={() => {Alert.alert("Deleting Profile...")}}
+            onPress={confirmDeleteChild}
             color="red"
           />
         </View>
