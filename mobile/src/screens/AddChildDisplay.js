@@ -4,25 +4,13 @@ import FormContainer from '../components/FormContainer';
 import FormInput from '../components/FormInput';
 import { createChild } from '../api/child';
 import { useAuth } from '../context/AuthContext';
-import useActionCable from '../websocket/useActionCable';
 
 export default function AddChildDisplay() {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
-  const { token, user } = useAuth();
+  const { token } = useAuth();
 
   const testAvatars = ["🐻", "🐶", "🐼", "🦊", "🐱"];
-
-  const { connected } = useActionCable({
-    parentId: user.id,
-    onMessage: (message) => {
-      console.log('📡 WebSocket message received:', message);
-      if (message.event === 'child_created') {
-        Alert.alert(`New child created: ${message.child.name}`);
-        // TODO: Trigger a refetch of child profiles here
-      }
-    }
-  });
 
   const handleAddNewChild = async () => {
     if (name.length > 0 && age > 0) {
@@ -71,9 +59,6 @@ export default function AddChildDisplay() {
           <Text style={styles.text}>Add Child</Text>
         </Pressable>
       </View>
-      <Text style={{ fontSize: 12, color: connected ? 'green' : 'red', textAlign: 'center' }}>
-        WebSocket is {connected ? 'connected' : 'disconnected'}
-      </Text>
     </FormContainer>
   );
 }

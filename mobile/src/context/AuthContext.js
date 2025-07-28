@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginUser, registerUser } from "../api/auth";
 import { getProfile } from "../api/user";
 import { getChildren } from "../api/child";
+import useActionCable from '../websocket/useActionCable';
 
 const AuthContext = createContext();
 
@@ -34,6 +35,19 @@ export function AuthProvider({ children }) {
     };
     loadToken();
   }, []);
+
+  useActionCable({
+    parentId: user?.id,
+    onMessage: (message) => {
+      console.log('WebSocket message received:', message);
+
+      if (message.event === 'child_created') {
+        setChildProfiles((prev) => [...prev, message.child])
+      }
+
+      // TODO: Add data syncing for other actions
+    }
+  });
 
   const login = async (email, password) => {
     const res = await loginUser(email, password);

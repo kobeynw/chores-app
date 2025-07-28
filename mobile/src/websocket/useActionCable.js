@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { AppState } from 'react-native';
-import { WS_BASE_URL } from '../config';
+import { AppState, Platform } from 'react-native';
+import { WS_BASE_URL, ANDROID_WS_BASE_URL } from '../config';
 
 const useActionCable = ({ parentId, onMessage }) => {
   const [connected, setConnected] = useState(false);
@@ -8,7 +8,8 @@ const useActionCable = ({ parentId, onMessage }) => {
   const appState = useRef(AppState.currentState);
 
   const connect = () => {
-    const ws = new WebSocket(`${WS_BASE_URL}/cable`); // TODO: use wss:// in prod
+    const base_url = Platform.OS === 'android' ? ANDROID_WS_BASE_URL : WS_BASE_URL;
+    const ws = new WebSocket(`${base_url}/cable`); // TODO: use wss:// in prod
 
     ws.onopen = () => {
       setConnected(true);
