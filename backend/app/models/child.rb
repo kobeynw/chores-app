@@ -16,4 +16,14 @@ class Child < ApplicationRecord
     self.level ||= 1
     self.xp ||= 0
   end
+
+  after_create_commit do
+    ActionCable.server.broadcast(
+      "parent_#{self.user_id}",
+      {
+        event: "child_created",
+        child: self.as_json
+      }
+    )
+  end
 end

@@ -54,6 +54,16 @@ Backend run command
 rails s -b 0.0.0.0
 ```
 
+Redis server (websocket)
+
+```
+brew services start redis
+```
+
+```
+brew services stop redis
+```
+
 Branch Workflow
 
 - branch name follows convention "chore-app/\<issue number>"

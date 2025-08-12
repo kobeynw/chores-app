@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginUser, registerUser } from "../api/auth";
 import { getProfile } from "../api/user";
 import { getChildren } from "../api/child";
+import useActionCable from '../websocket/useActionCable';
 
 const AuthContext = createContext();
 
@@ -15,11 +16,12 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const loadToken = async () => {
       try {
+        setLoading(true);
         const storedToken = await AsyncStorage.getItem("token");
         if (storedToken) {
           setToken(storedToken);
-          const profile = await getProfile(storedToken);
-          setUser(profile);
+          const res = await getProfile(storedToken);
+          setUser(res?.user);
           const childProfileData = await getChildren(storedToken);
           setChildProfiles(childProfileData);
         }
@@ -35,22 +37,54 @@ export function AuthProvider({ children }) {
     loadToken();
   }, []);
 
+  useActionCable({
+    parentId: user?.id,
+    isLoggedIn: !!token,
+    onMessage: (message) => {
+      console.log('WebSocket message received:', message);
+
+      if (message.event === 'child_created') {
+        setChildProfiles((prev) => {
+          const exists = prev.some(child => child.id === message.child.id);
+          if (exists) return prev;
+          return [...prev, message.child];
+        });
+      }
+
+      // TODO: Add data syncing for other actions
+    }
+  });
+
   const login = async (email, password) => {
-    const res = await loginUser(email, password);
-    await AsyncStorage.setItem("token", res.token);
-    setToken(res.token);
-    setUser(res.user);
-    const childProfileData = await getChildren(res.token);
-    setChildProfiles(childProfileData);
+    try {
+      setLoading(true);
+      const res = await loginUser(email, password);
+      await AsyncStorage.setItem("token", res.token);
+      setToken(res?.token);
+      setUser(res?.user);
+      const childProfileData = await getChildren(res.token);
+      setChildProfiles(childProfileData);
+    } catch (err) {
+      console.log("Login failed:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const register = async (email, password, passcode) => {
-    const res = await registerUser(email, password, passcode);
-    await AsyncStorage.setItem("token", res.token);
-    setToken(res.token);
-    setUser(res.user);
-    const childProfileData = await getChildren(res.token);
-    setChildProfiles(childProfileData);
+    try {
+      setLoading(true);
+      const res = await registerUser(email, password, passcode);
+      await AsyncStorage.setItem("token", res.token);
+      setToken(res?.token);
+      setUser(res?.user);
+      const childProfileData = await getChildren(res.token);
+      setChildProfiles(childProfileData);
+    } catch (err) {
+      console.log("Register failed:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = async () => {

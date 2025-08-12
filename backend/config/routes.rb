@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
       resources :children
 
+      mount ActionCable.server => "/cable"
+
       get "/ping", to: "ping#index"
     end
   end
