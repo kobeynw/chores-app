@@ -44,11 +44,15 @@ export function AuthProvider({ children }) {
       console.log('WebSocket message received:', message);
 
       if (message.event === 'child_created') {
-        setChildProfiles((prev) => {
+        setChildProfiles(prev => {
           const exists = prev.some(child => child.id === message.child.id);
           if (exists) return prev;
           return [...prev, message.child];
         });
+      } else if (message.event === 'child_updated') {
+        setChildProfiles(prev => [...prev.filter(child => child.id !== message.child.id), message.child]);
+      } else if (message.event === 'child_destroyed') {
+        setChildProfiles(prev => prev.filter(child => child.id !== message.child.id));
       }
 
       // TODO: Add data syncing for other actions
