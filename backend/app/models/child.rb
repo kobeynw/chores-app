@@ -11,17 +11,23 @@ class Child < ApplicationRecord
 
   after_initialize :set_defaults
 
+  after_create_commit -> { self.broadcast_callback("child_created") }
+  after_update_commit -> { self.broadcast_callback("child_updated") }
+  after_destroy_commit -> { self.broadcast_callback("child_destroyed") }
+
+  private
+
   def set_defaults
     self.points ||= 0
     self.level ||= 1
     self.xp ||= 0
   end
 
-  after_create_commit do
+  def broadcast_callback(event)
     ActionCable.server.broadcast(
       "parent_#{self.user_id}",
       {
-        event: "child_created",
+        event: event,
         child: self.as_json
       }
     )
