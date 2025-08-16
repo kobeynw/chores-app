@@ -80,8 +80,6 @@ export default function ChildProfileViewer({ route }) {
     );
   }
 
-  // TODO: add logic to auto-compute the level and XP
-
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}

@@ -3,9 +3,12 @@ import { View, Text, Image, Button, StyleSheet, ScrollView, Pressable, Alert } f
 import EllipseShape from '../components/EllipseShape';
 import ProgressBar from '../components/ProgressBar';
 import CardContainer from '../components/CardContainer';
+import { levelToXP } from '../helpers/LevelToXP';
 
 export default function ChildDashboard({ route }) {
   const { childProfile } = route.params;
+
+  const xpToNextLevel = levelToXP(childProfile.level);
 
   return (
     <View style={styles.scrollWrapper}>
@@ -35,16 +38,16 @@ export default function ChildDashboard({ route }) {
           />
         </View>
 
-        <CardContainer title="Level 16">
+        <CardContainer title={`Level ${childProfile.level}`}>
           <View name="points-display" style={styles.columns}>
             <Text style={styles.text}>Points</Text>
-            <Text style={styles.text}>$ 12,000</Text>
+            <Text style={styles.text}>{`💰 ${childProfile.points}`}</Text>
           </View>
           <View name="XP-display" style={styles.columns}>
             <Text style={styles.text}>XP</Text>
-            <Text style={styles.text}>1,300/2,000</Text>
+            <Text style={styles.text}>{`${childProfile.xp}/${xpToNextLevel}`}</Text>
           </View>
-          <ProgressBar progress={1300/2000} width={270} height={16} />
+          <ProgressBar progress={childProfile.xp/xpToNextLevel} width={270} height={16} />
         </CardContainer>
 
         <CardContainer title="Chores">
