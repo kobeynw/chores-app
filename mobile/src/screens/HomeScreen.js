@@ -19,6 +19,18 @@ export default function HomeScreen() {
     />
   ));
 
+  const footerPadding = 310 - childProfiles.length * 45;
+
+  const NoChildrenNotice = () => {
+    return (
+      <View>
+        <Text style={styles.notice}>
+          Added child profiles will appear here
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.scrollWrapper}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -28,7 +40,7 @@ export default function HomeScreen() {
           <Text style={styles.header}>Welcome to your chore manager!</Text>
           <Text style={styles.subheader}>Who is using the app?</Text>
 
-          {childProfiles.length > 0 && childCards}
+          {childProfiles.length > 0 ? childCards : <NoChildrenNotice />}
 
           <View style={{ marginTop: 40 }}>
           <Button
@@ -37,7 +49,7 @@ export default function HomeScreen() {
           />
           </View>
 
-          <Text style={{ paddingTop: 150, paddingBottom: 30 }}>Workman Software™</Text>
+          <Text style={{ paddingTop: footerPadding >= 70 ? footerPadding : 70, paddingBottom: 30 }}>Workman Software™</Text>
         </View>
 
         <PasscodeModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
@@ -71,4 +83,15 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     width: '100%',
   },
+  notice: {
+    borderColor: '#888',
+    borderWidth: 1,
+    borderRadius: 8,
+    borderStyle: 'dashed',
+    marginVertical: 30,
+    paddingVertical: 20,
+    paddingHorizontal: 30,
+    backgroundColor: '#f8f8f8',
+    width: '100%',
+  }
 });
