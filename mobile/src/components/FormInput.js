@@ -21,6 +21,7 @@ export default function FormInput({
       keyboardType={keyboardType}
       secureTextEntry={secureTextEntry}
       autoCapitalize="none"
+      placeholderTextColor="#C7C7CD"
     />
   );
 }
