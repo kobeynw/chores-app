@@ -4,11 +4,21 @@ class Chore < ApplicationRecord
   has_many :chore_assignments
   has_many :children, through: :chore_assignments
 
-  enum frequency: {
+  enum :frequency, {
     once: 0,
     daily: 1,
     weekly: 2,
     custom: 3
+  }
+
+  enum :day_of_week, {
+    monday: 0,
+    tuesday: 1,
+    wednesday: 2,
+    thursday: 3,
+    friday: 4,
+    saturday: 5,
+    sunday: 6
   }
 
   private
@@ -21,7 +31,7 @@ class Chore < ApplicationRecord
       errors.add(:day_of_week, "must be present") if day_of_week.blank?
       errors.add(:start_date, "must be present") if start_date.blank?
       errors.add(:end_date, "must be present") if end_date.blank?
-    when :custom_days
+    when :custom
       errors.add(:days_of_week, "must be present") if days_of_week.blank?
       errors.add(:start_date, "must be present") if start_date.blank?
       errors.add(:end_date, "must be present") if end_date.blank?

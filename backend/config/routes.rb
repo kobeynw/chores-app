@@ -7,16 +7,24 @@ Rails.application.routes.draw do
   
   namespace :api do
     namespace :v1 do
+      # AUTH ROUTES
       post "register", to: "auth#register"
       post "login", to: "auth#login"
       post "passcode", to: "auth#passcode"
 
+      # USER ROUTES
       get "profile", to: "users#profile"
 
+      # CHILD ROUTES
       resources :children
 
+      # CHORE ROUTES
+      resources :chores
+
+      # WEBHOOK ROUTES
       mount ActionCable.server => "/cable"
 
+      # TEST ROUTES
       get "/ping", to: "ping#index"
     end
   end

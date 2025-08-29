@@ -5,13 +5,14 @@ import FormInput from '../components/FormInput';
 import FormDropdown from '../components/FormDropdown';
 import FormMultiSelectDropdown from '../components/FormMultiSelectDropdown';
 import DatePicker from '../components/DatePicker';
+import { createChore } from '../api/chore';
 import { useAuth } from '../context/AuthContext';
 
 export default function AddChoreDisplay() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
-  const [priority, setPriority] = useState(0);
+  const [priority, setPriority] = useState("");
   const [childRecipients, setChildRecipients] = useState([]);
 
   const today = new Date();
@@ -29,19 +30,90 @@ export default function AddChoreDisplay() {
 
   const { token, childProfiles } = useAuth();
 
+  const FREQUENCY_VALUES = ["Once", "Daily", "Weekly", "Custom"];
+  const PRIORITY_VALUES = ["Low", "Medium", "High"];
+  const DAY_VALUES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const XP_INCREMENT = 500;
+
   const handleAddNewChore = async () => {
-    if (title.length > 0 && points > 0 && xp > 0) {
+    if (validateParams()) {
       try {
-        // Add chore using API
-        // Validate that start date is before end date if applicable
+        await createChore(newChore(), token);
+        Alert.alert("Successfully added chore");
+        setTitle("");
+        setDescription("");
+        setPoints(0);
+        setPriority("");
+        setChildRecipients([]);
+        setFrequency("");
+        setDueDate(today);
+        setDayOfWeek("");
+        setStartDate(today);
+        setEndDate(today);
+        setDaysOfWeek([]);
       } catch (error) {
         console.error("Error creating chore:", error);
         Alert.alert("Something went wrong while adding the chore.");
       }
-    } else {
-      Alert.alert("Please enter valid title, points, and priority.");
     }
   };
+
+  const validateParams = () => {
+    if (title.length <= 0) {
+      Alert.alert("Please enter a title.");
+      return false;
+    } else if (points < 0) {
+      Alert.alert("Please enter valid points.");
+      return false;
+    } else if (!PRIORITY_VALUES.includes(priority)) {
+      Alert.alert("Please enter a valid priority.");
+      return false;
+    } else if (!FREQUENCY_VALUES.includes(frequency)) {
+      Alert.alert("Please enter a valid frequency.");
+      return false;
+    } else if ((frequency == "Weekly" || frequency == "Custom") && startDate.setHours(0,0,0,0).valueOf() > endDate.setHours(0,0,0,0).valueOf()) {
+      Alert.alert("Please enter a start date that occurs before the end date.");
+      return false;
+    } else if (frequency == "Weekly" && !DAY_VALUES.includes(dayOfWeek)) {
+      Alert.alert("Please enter a valid day of the week.");
+      return false;
+    } else if (frequency == "Custom") {
+      if (daysOfWeek.length <= 0) {
+        Alert.alert("Please enter valid days of the week.");
+        return false;
+      }
+      daysOfWeek.forEach(day => {
+        if (!DAY_VALUES.includes(day)) {
+          Alert.alert("Please enter valid days of the week.");
+          return false;
+        }
+      });
+    }
+
+    return true;
+  }
+
+  const newChore = () => {
+    let xp = 0;
+    PRIORITY_VALUES.forEach((priorityVal, index) => {
+      if (priority === priorityVal) {
+        xp = (index + 1) * XP_INCREMENT;
+      }
+    });
+
+    return {
+      "title": title,
+      "description": description,
+      "points": points,
+      "xp": xp,
+      "frequency": frequency.toLowerCase(),
+      "due_date": dueDate,
+      "day_of_week": dayOfWeek.toLowerCase(),
+      "days_of_week": daysOfWeek,
+      "start_date": startDate,
+      "end_date": endDate,
+    };
+  }
 
   return (
     <KeyboardAvoidingView
@@ -73,22 +145,13 @@ export default function AddChoreDisplay() {
           <FormDropdown
             value={priority}
             onValueChange={setPriority}
-            items={[
-              {label: 'Low', value: 'Low'},
-              {label: 'Medium', value: 'Medium'},
-              {label: 'High', value: 'High'},
-            ]}
+            items={PRIORITY_VALUES.map(p => ({ label: p, value: p }))}
             placeholder='Priority'
           />
           <FormDropdown
             value={frequency}
             onValueChange={setFrequency}
-            items={[
-              { label: 'Once', value: 'Once' },
-              { label: 'Daily', value: 'Daily' },
-              { label: 'Weekly', value: 'Weekly' },
-              { label: 'Custom', value: 'Custom' },
-            ]}
+            items={FREQUENCY_VALUES.map(f => ({ label: f, value: f }))}
             placeholder='Frequency'
           />
           {frequency == "Once" && (
@@ -103,15 +166,7 @@ export default function AddChoreDisplay() {
             <><FormDropdown
               value={dayOfWeek}
               onValueChange={setDayOfWeek}
-              items={[
-                { label: 'Monday', value: 'Monday' },
-                { label: 'Tuesday', value: 'Tuesday' },
-                { label: 'Wednesday', value: 'Wednesday' },
-                { label: 'Thursday', value: 'Thursday' },
-                { label: 'Friday', value: 'Friday' },
-                { label: 'Saturday', value: 'Saturday' },
-                { label: 'Sunday', value: 'Sunday' },
-              ]}
+              items={DAY_VALUES.map(d => ({ label: d, value: d }))}
               placeholder='Day'
             />
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 12 }}>
@@ -137,15 +192,7 @@ export default function AddChoreDisplay() {
             <><FormMultiSelectDropdown
               values={daysOfWeek}
               onValuesChange={setDaysOfWeek}
-              items={[
-                { label: 'Monday', value: 'Monday' },
-                { label: 'Tuesday', value: 'Tuesday' },
-                { label: 'Wednesday', value: 'Wednesday' },
-                { label: 'Thursday', value: 'Thursday' },
-                { label: 'Friday', value: 'Friday' },
-                { label: 'Saturday', value: 'Saturday' },
-                { label: 'Sunday', value: 'Sunday' },
-              ]}
+              items={DAY_VALUES.map(d => ({ label: d, value: d }))}
               placeholder='Days'
             />
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 12 }}>
