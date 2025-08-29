@@ -5,6 +5,7 @@ import ParentDashboard from '../screens/ParentDashboard';
 import ChildDashboard from '../screens/ChildDashboard';
 import ChildProfileViewer from '../screens/ChildProfileViewer';
 import AddChildDisplay from '../screens/AddChildDisplay';
+import AddChoreDisplay from '../screens/AddChoreDisplay';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,12 @@ export default function AppStack({ headerStyle }) {
         component={AddChildDisplay}
         options={headerStyle}
       />
+      <Stack.Screen
+        name="AddChoreDisplay"
+        component={AddChoreDisplay}
+        options={headerStyle}
+      >
+      </Stack.Screen>
 
       {/* ======== CHILD SCREENS ======== */}
       <Stack.Screen

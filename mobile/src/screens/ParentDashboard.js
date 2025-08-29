@@ -42,9 +42,15 @@ export default function ParentDashboard() {
         </CardContainer>
 
         <CardContainer title="Chores">
+          <Pressable
+            style={pressableStyle}
+            onPress={() => navigation.navigate('AddChoreDisplay')}
+          >
+            <Text style={styles.text}>Add Chores</Text>
+          </Pressable>
           <Pressable 
             style={pressableStyle}
-            onPress={() => {Alert.alert("Opening Calendar...")}}
+            onPress={() => {Alert.alert("Opening Calendar Screen...")}}
           >
             <Text style={styles.text}>Calendar</Text>
           </Pressable>
