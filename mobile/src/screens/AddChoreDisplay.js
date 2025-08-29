@@ -4,7 +4,7 @@ import FormContainer from '../components/FormContainer';
 import FormInput from '../components/FormInput';
 import FormDropdown from '../components/FormDropdown';
 import FormMultiSelectDropdown from '../components/FormMultiSelectDropdown';
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DatePicker from '../components/DatePicker';
 import { useAuth } from '../context/AuthContext';
 
 export default function AddChoreDisplay() {
@@ -12,6 +12,7 @@ export default function AddChoreDisplay() {
   const [description, setDescription] = useState("");
   const [points, setPoints] = useState(0);
   const [priority, setPriority] = useState(0);
+  const [childRecipients, setChildRecipients] = useState([]);
 
   const today = new Date();
   const oneYearLater = new Date();
@@ -26,7 +27,7 @@ export default function AddChoreDisplay() {
   const [endDate, setEndDate] = useState(today);
   const [daysOfWeek, setDaysOfWeek] = useState([]);
 
-  const { token } = useAuth();
+  const { token, childProfiles } = useAuth();
 
   const handleAddNewChore = async () => {
     if (title.length > 0 && points > 0 && xp > 0) {
@@ -91,15 +92,11 @@ export default function AddChoreDisplay() {
             placeholder='Frequency'
           />
           {frequency == "Once" && (
-            <DateTimePicker
-              value={dueDate}
-              mode="date"
-              display="default"
-              onChange={(event, selectedDate) => {
-                if (selectedDate) setDueDate(selectedDate);
-              }}
-              minimumDate={oneYearPrevious}
-              maximumDate={oneYearLater}
+            <DatePicker
+              date={dueDate}
+              setDate={setDueDate}
+              minDate={oneYearPrevious}
+              maxDate={oneYearLater}
             />
           )}
           {frequency == "Weekly" && (
@@ -119,28 +116,20 @@ export default function AddChoreDisplay() {
             />
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 12 }}>
               <Text style={{ width: 35 }}>From</Text>
-              <DateTimePicker
-                value={startDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  if (selectedDate) setStartDate(selectedDate);
-                }}
-                minimumDate={oneYearPrevious}
-                maximumDate={oneYearLater}
+              <DatePicker
+                date={startDate}
+                setDate={setStartDate}
+                minDate={oneYearPrevious}
+                maxDate={oneYearLater}
               />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 8, paddingLeft: 12 }}>
               <Text style={{ width: 35 }}>To</Text>
-              <DateTimePicker
-                value={endDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  if (selectedDate) setEndDate(selectedDate);
-                }}
-                minimumDate={oneYearPrevious}
-                maximumDate={oneYearLater}
+              <DatePicker
+                date={endDate}
+                setDate={setEndDate}
+                minDate={oneYearPrevious}
+                maxDate={oneYearLater}
               />
             </View></>
           )}
@@ -161,31 +150,29 @@ export default function AddChoreDisplay() {
             />
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 12 }}>
               <Text style={{ width: 35 }}>From</Text>
-              <DateTimePicker
-                value={startDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  if (selectedDate) setStartDate(selectedDate);
-                }}
-                minimumDate={oneYearPrevious}
-                maximumDate={oneYearLater}
+              <DatePicker
+                date={startDate}
+                setDate={setStartDate}
+                minDate={oneYearPrevious}
+                maxDate={oneYearLater}
               />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 8, paddingLeft: 12 }}>
               <Text style={{ width: 35 }}>To</Text>
-              <DateTimePicker
-                value={endDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  if (selectedDate) setEndDate(selectedDate);
-                }}
-                minimumDate={oneYearPrevious}
-                maximumDate={oneYearLater}
+              <DatePicker
+                date={endDate}
+                setDate={setEndDate}
+                minDate={oneYearPrevious}
+                maxDate={oneYearLater}
               />
             </View></>
           )}
+          <FormMultiSelectDropdown
+            values={childRecipients}
+            onValuesChange={setChildRecipients}
+            items={childProfiles.map(profile => ({ label: profile.name, value: profile.name }))}
+            placeholder='Children'
+          />
           <View style={{ alignItems: 'center' }}>
             <Pressable 
               style={pressableStyle}

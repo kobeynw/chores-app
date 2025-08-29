@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   placeholder: {
-    color: '#888',
+    color: '#C7C7CD',
   },
   backdrop: {
     flex: 1,
